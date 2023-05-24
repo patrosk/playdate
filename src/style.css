@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+:root {
+  --bg-primary: #fffcf2;
+  --bg-secondary: #ffd79b;
+  --text: #ff8642;
+  --grass: #20501f;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-secondary);
+}
