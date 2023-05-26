@@ -40,10 +40,6 @@ stage.addChild(stageBackground);
 stageBackground.width = app.screen.width;
 stageBackground.height = app.screen.height;
 
-// Create a 'grid' of boxes for the objects to move in
-let boxHeight = app.screen.height / 20;
-let boxWidth = app.screen.width / 20;
-
 // Text styling
 const textStyle = new PIXI.TextStyle({
   fontFamily: 'Futura',
@@ -89,8 +85,6 @@ score();
 
 function animate() {
   app.render(stage);
-
- // checkIfCollide();
   requestAnimationFrame(animate);
 }
 
@@ -101,31 +95,16 @@ document.addEventListener('keydown', onKeyDown);
 function onKeyDown(key) {
   if (key.keyCode === 37) {
     if (kim.position.x != 0) {
-      kim.position.x -= boxWidth;
+      kim.position.x -= 10;
     }
   }
 
   if (key.keyCode === 39) {
-    if (kim.position.x != app.screen.width - (boxWidth + 50)) {
-      kim.position.x += boxWidth;
+    if (kim.position.x != app.screen.width - 100) {
+      kim.position.x += 10;
     }
   }
 }
-
-
-// Tweak this function later!
-// function update() {
-//   trash1.position.y -= 40;
-
-//   if (kim.score > 8) {
-//     trash1.position.y -= 6;
-//   } else if (kim.score > 25) {
-//     trash1.position.y -= 7;
-//   } else if (kim.score > 40) {
-//     trash1.position.y -= 8;
-//   }
-//   requestAnimationFrame(update);
-// }
 
 // Interval to spawn new trash items
 let trashItems = [];
@@ -161,15 +140,17 @@ function fallDown(trashItem) {
 
 // Function to check if Kim and trash items collide
  function checkIfCollide(trashItem) {
-  console.log(trashItem.position.y);
   if (
-    // trashItem.position.x > kim.position.x - boxWidth / 2 &&
-    // trashItem.position.x < kim.position.x + boxWidth / 2 &&
-    trashItem.position.y >= 585
-  ) {
-    kim.score++;
-    playerScore.text = kim.score;
-  }
+    trashItem.position.x == kim.position.x
+    ) {
+      kim.score++;
+      playerScore.text = kim.score;
+    }
+    else if(trashItem.position.y >= 585) {
+      console.log('oh no it hit the ground');
+      stage.removeChild(trashItem);
+    }
+
     //gameOverScreen.visible = true;
     //stage.visible = false;
     //startPage.visible = false;
