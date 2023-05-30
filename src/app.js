@@ -76,12 +76,15 @@ kim4.y = 275;
 kim4.x = 475;
 infoBox.addChild(kim4);
 
+let isGameOver = false;
+
 // Function that takes the user to the next view
 function startClick() {
   startScreen.visible = false;
   stage.visible = true;
   generateTrashItems();
   score();
+  isGameOver == false;
 }
 
 // Add a stage
@@ -149,11 +152,15 @@ function onKeyDown(key) {
 }
 
 // Interval to spawn new trash items
+let generate = null;
 function generateTrashItems() {
-  setInterval(() => {
+  generate = setInterval(() => {
     const newTrashItem = createTrashItem();
     fallDown(newTrashItem);
   }, 1000);
+  if (isGameOver == true) {
+    clearInterval(generate);
+  }
 }
 
 // Spawn trash items in random positions
@@ -178,11 +185,15 @@ function createTrashItem() {
 }
 
 // Function to make trash items move vertically
+let fall = null;
 function fallDown(trashItem) {
-  setInterval(() => {
+  fall = setInterval(() => {
     checkIfCollide(trashItem);
     trashItem.position.y += 10;
   }, 125);
+  if (isGameOver == true) {
+    clearInterval(fall);
+  }
 }
 
 let trashOnGround = 0;
@@ -209,6 +220,7 @@ function checkIfCollide(trashItem) {
     stage.removeChild(trashItem);
     trashOnGround++;
     if (trashOnGround >= 10) {
+      isGameOver = true;
       let result;
       if (kim.score - trashOnGround > 9) {
         result = 'neutral';
