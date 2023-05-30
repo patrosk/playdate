@@ -1,16 +1,14 @@
-INSERT MANDATORY GIF
+<img src="https://media2.giphy.com/media/l1KVcrdl7rJpFnY2s/giphy.gif?cid=ecf05e47fnvhqs9nb7nj048yh433vuq1bzvlutp3bhpsfhpf&ep=v1_gifs_search&rid=giphy.gif&ct=g" width="100%">
 
-# Project Title
+# Rädda miljön med Kim
 
-Text about the project and which JavaScript library you're using. This would also be a great place to link the game on Netlify.
+Simple game built with PIXI.js. In Rädda miljön med Kim ('Save the Environment with Kim'), you help the teddy bear Kim collect trash that falls from the sky. 
+
+Live page: 
 
 # Installation
 
-Add the installation instructions.
-
-# Changelog
-
--   [#1 - Add a link to each pull request with a descriptive line.](#1)
+Clone the repository and fire up a Live Server. Enjoy the game!
 
 # Code Review
 
