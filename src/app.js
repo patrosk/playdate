@@ -85,11 +85,13 @@ let isGameOver = false;
 function startClick() {
   startScreen.visible = false;
   stage.visible = true;
-  if (isGameOver == false) {
-    generateTrashItems();
-    score();
-  }
-  isGameOver == false;
+  generateTrashItems();
+  requestAnimationFrame(gameLoop);
+  // if (isGameOver == false) {
+  //   generateTrashItems();
+  //   score();
+  // }
+  // isGameOver == false;
 }
 
 // Add a stage
@@ -156,17 +158,61 @@ function onKeyDown(key) {
   }
 }
 
-// Interval to spawn new trash items
-let generate = null;
-function generateTrashItems() {
-  generate = setInterval(() => {
-    const newTrashItem = createTrashItem();
-    fallDown(newTrashItem);
-  }, 1000);
-  if (isGameOver == true) {
-    clearInterval(generate);
+// Game Loop
+function gameLoop() {
+  if (gameOver == true) {
+    gameOverScreen.visible = true;
+    stage.visible = false;
+  }
+  else {
+    score();
+    requestAnimationFrame(gameLoop);
   }
 }
+
+// Function to animate the game
+// function animate() {
+//   app.render(stage);
+//   requestAnimationFrame(animate);
+// }
+
+// animate();
+
+let trashItems = [];
+let trashOnGround = 0;
+// Interval to spawn new trash items
+function generateTrashItems() {
+    setInterval(() => {
+    const newTrashItem = createTrashItem();
+    trashItems.push(newTrashItem);
+    // fallDown(newTrashItem);
+    }, 1000);
+}
+
+setInterval(() => {
+  trashItems.forEach((trashItem) => {
+    if (trashItem.position.y >= 640) {
+      const oldTrashItem = trashItems.shift();
+      stage.removeChild(oldTrashItem);
+      trashOnGround++;
+      console.log(trashOnGround);
+    }
+    fallDown(trashItem);
+    checkIfCollide(trashItem);
+  })
+  if (trashOnGround >= 10) {
+    isGameOver = true;
+    let result;
+    if (kim.score - trashOnGround > 9) {
+      result = 'neutral';
+    } else if (kim.score - trashOnGround < 10) {
+      result = 'bad';
+    } else if (kim.score - trashOnGround > 19) {
+      result = 'good';
+    }
+    gameOver(result);
+  }
+}, 1000);
 
 // Spawn trash items in random positions
 let trashItem;
@@ -190,18 +236,12 @@ function createTrashItem() {
 }
 
 // Function to make trash items move vertically
-let fall = null;
 function fallDown(trashItem) {
-  fall = setInterval(() => {
-    checkIfCollide(trashItem);
+  setInterval(function () {
+    // checkIfCollide(trashItem);
     trashItem.position.y += 10;
   }, 125);
-  if (isGameOver == true) {
-    clearInterval(fall);
-  }
 }
-
-let trashOnGround = 0;
 
 // Function to check trash items collide with Kim or the ground
 function checkIfCollide(trashItem) {
@@ -217,33 +257,35 @@ function checkIfCollide(trashItem) {
     stage.removeChild(trashItem);
     kim.score++;
     playerScore.text = kim.score;
+    createTrashItem();
   }
   // If trash item hits the ground
-  else if (trashItem.position.y == 600) {
-    trashItem.position.y = -100;
-    trashItem.position.x = -100;
-    stage.removeChild(trashItem);
-    trashOnGround++;
-    if (trashOnGround >= 10) {
-      isGameOver = true;
-      let result;
-      if (kim.score - trashOnGround > 9) {
-        result = 'neutral';
-      } else if (kim.score - trashOnGround < 10) {
-        result = 'bad';
-      } else if (kim.score - trashOnGround > 19) {
-        result = 'good';
-      }
-      gameOver(result);
-    }
-    console.log(trashOnGround);
-  }
+  // else if (trashItem.position.y == 640) {
+  //   stage.removeChild(trashItem);
+  //   trashItem.position.y = -100;
+  //   trashItem.position.x = -100;
+  //   trashOnGround++;
+  //   if (trashOnGround >= 10) {
+  //     isGameOver = true;
+  //     let result;
+  //     if (kim.score - trashOnGround > 9) {
+  //       result = 'neutral';
+  //     } else if (kim.score - trashOnGround < 10) {
+  //       result = 'bad';
+  //     } else if (kim.score - trashOnGround > 19) {
+  //       result = 'good';
+  //     }
+  //     gameOver(result);
+  //   }
+  //   console.log(trashOnGround);
+  // }
 }
 
 function gameOver(result) {
   gameOverScreen.visible = true;
   stage.visible = false;
   startScreen.visible = false;
+  trashItems = [];
   let gameOverBackground;
   let resultText;
   if (result == 'good') {
