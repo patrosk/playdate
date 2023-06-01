@@ -85,6 +85,7 @@ let isGameOver = false;
 function startClick() {
   startScreen.visible = false;
   stage.visible = true;
+
   if (isGameOver == false) {
     generateTrashItems();
     score();
@@ -156,17 +157,39 @@ function onKeyDown(key) {
   }
 }
 
+let trashItems = [];
+let trashOnGround = 0;
 // Interval to spawn new trash items
-let generate = null;
 function generateTrashItems() {
-  generate = setInterval(() => {
+  setInterval(() => {
     const newTrashItem = createTrashItem();
+    trashItems.push(newTrashItem);
     fallDown(newTrashItem);
   }, 1000);
-  if (isGameOver == true) {
-    clearInterval(generate);
-  }
 }
+
+setInterval(() => {
+  trashItems.forEach((trashItem) => {
+    if (trashItem.position.y >= 640) {
+      const oldTrashItem = trashItems.shift();
+      stage.removeChild(oldTrashItem);
+      trashOnGround++;
+      console.log(trashOnGround);
+    }
+  });
+  if (trashOnGround >= 10) {
+    isGameOver = true;
+    let result;
+    if (kim.score - trashOnGround > 19) {
+      result = 'good';
+    } else if (kim.score - trashOnGround < 10) {
+      result = 'bad';
+    } else {
+      result = 'neutral';
+    }
+    gameOver(result);
+  }
+}, 1000);
 
 // Spawn trash items in random positions
 let trashItem;
@@ -190,18 +213,12 @@ function createTrashItem() {
 }
 
 // Function to make trash items move vertically
-let fall = null;
 function fallDown(trashItem) {
-  fall = setInterval(() => {
+  setInterval(function () {
     checkIfCollide(trashItem);
     trashItem.position.y += 10;
   }, 125);
-  if (isGameOver == true) {
-    clearInterval(fall);
-  }
 }
-
-let trashOnGround = 0;
 
 // Function to check trash items collide with Kim or the ground
 function checkIfCollide(trashItem) {
@@ -214,29 +231,10 @@ function checkIfCollide(trashItem) {
   ) {
     trashItem.position.y = -100;
     trashItem.position.x = -100;
+    trashItems.shift();
     stage.removeChild(trashItem);
     kim.score++;
     playerScore.text = kim.score;
-  }
-  // If trash item hits the ground
-  else if (trashItem.position.y == 600) {
-    trashItem.position.y = -100;
-    trashItem.position.x = -100;
-    stage.removeChild(trashItem);
-    trashOnGround++;
-    if (trashOnGround >= 10) {
-      isGameOver = true;
-      let result;
-      if (kim.score - trashOnGround > 9) {
-        result = 'neutral';
-      } else if (kim.score - trashOnGround < 10) {
-        result = 'bad';
-      } else if (kim.score - trashOnGround > 19) {
-        result = 'good';
-      }
-      gameOver(result);
-    }
-    console.log(trashOnGround);
   }
 }
 
@@ -244,6 +242,7 @@ function gameOver(result) {
   gameOverScreen.visible = true;
   stage.visible = false;
   startScreen.visible = false;
+  trashItems = [];
   let gameOverBackground;
   let resultText;
   if (result == 'good') {
