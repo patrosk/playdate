@@ -4,7 +4,7 @@
 
 Simple game built with PIXI.js. In Rädda miljön med Kim ('Save the Environment with Kim'), you help the teddy bear Kim collect trash that falls from the sky.
 
-Live page:
+Live page: https://kim-raddar-miljon.netlify.app/
 
 # Installation
 
