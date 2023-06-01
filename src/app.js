@@ -161,11 +161,11 @@ let trashItems = [];
 let trashOnGround = 0;
 // Interval to spawn new trash items
 function generateTrashItems() {
-    setInterval(() => {
+  setInterval(() => {
     const newTrashItem = createTrashItem();
     trashItems.push(newTrashItem);
     fallDown(newTrashItem);
-    }, 1000);
+  }, 1000);
 }
 
 setInterval(() => {
@@ -176,7 +176,7 @@ setInterval(() => {
       trashOnGround++;
       console.log(trashOnGround);
     }
-  })
+  });
   if (trashOnGround >= 10) {
     isGameOver = true;
     let result;
