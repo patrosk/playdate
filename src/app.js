@@ -12,7 +12,7 @@ document.body.appendChild(app.view);
 const startScreen = new PIXI.Container();
 app.stage.addChild(startScreen);
 
-// Add start image to start page (explaining the rules and how the game works)
+// Add start image to start page
 const startImage = new PIXI.Sprite.from('/src/resources/neutral.svg');
 startScreen.addChild(startImage);
 startImage.width = app.screen.width;
@@ -21,12 +21,14 @@ startImage.buttonMode = true;
 startImage.interactive = true;
 startImage.on('click', startClick);
 
+// Add info box to start page (explaining the rules and how the game works)
 const infoBox = new PIXI.Graphics();
 infoBox.beginFill(0xfffcf2);
 infoBox.drawRect(0, 0, 600, 400);
 infoBox.position.set(200, 150);
 startScreen.addChild(infoBox);
 
+// Format text styles
 const headerStyle = new PIXI.TextStyle({
   fontFamily: 'Futura',
   fontSize: 36,
@@ -41,6 +43,7 @@ const textStyle = new PIXI.TextStyle({
   wordWrapWidth: 500,
 });
 
+// Add text and images to info box
 const infoHeader = new PIXI.Text('Rädda miljön med Kim', headerStyle);
 infoHeader.x = 50;
 const infoText = new PIXI.Text(
@@ -82,8 +85,10 @@ let isGameOver = false;
 function startClick() {
   startScreen.visible = false;
   stage.visible = true;
-  generateTrashItems();
-  score();
+  if (isGameOver == false) {
+    generateTrashItems();
+    score();
+  }
   isGameOver == false;
 }
 
